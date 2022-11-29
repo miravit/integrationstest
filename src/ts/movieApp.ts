@@ -1,4 +1,4 @@
-import { IMovie } from "./models/Movie";
+import { IMovie } from "./models/IMovie";
 import { getData } from "./services/movieservice";
 
 let movies: IMovie[] = [];
@@ -7,7 +7,7 @@ export const init = () => {
   let form = document.getElementById("searchForm") as HTMLFormElement;
   form.addEventListener("submit", (e: SubmitEvent) => {
     e.preventDefault();
-    handleSubmit();
+    exports.handleSubmit();
   });
 };
 
@@ -24,12 +24,12 @@ export async function handleSubmit() {
     movies = await getData(searchText);
 
     if (movies.length > 0) {
-      exports.createHtml(movies, container);
+      exports.createHtml(movies, container); //.exports
     } else {
-      exports.displayNoResult(container);
+      exports.displayNoResult(container); //.exports
     }
   } catch {
-    exports.displayNoResult(container);
+    exports.displayNoResult(container); //.exports
   }
 }
 
