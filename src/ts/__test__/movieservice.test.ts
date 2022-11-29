@@ -28,6 +28,8 @@ let mockData: IMovie[] = [
   },
 ];
 
+//jest.mock(./../service/services)
+
 jest.mock("axios", () => ({
   get: async () => {
     return new Promise((resolve) => {
