@@ -1,6 +1,6 @@
 import { describe, test, expect, jest } from "@jest/globals";
-import { IMovie } from "../models/IMovie";
-import { getData } from "../services/movieservice";
+import { IMovie } from "../ts/models/IMovie";
+import { getData } from "../ts/services/movieservice";
 
 let mockData: IMovie[] = [
   {
@@ -27,8 +27,6 @@ let mockData: IMovie[] = [
     Year: "1996",
   },
 ];
-
-//jest.mock(./../service/services)
 
 jest.mock("axios", () => ({
   get: async () => {
