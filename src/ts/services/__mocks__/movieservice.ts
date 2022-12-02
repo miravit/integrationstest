@@ -1,7 +1,7 @@
 import { IOmdbResponse } from "../../models/IOmdbResponse";
 import { IMovie } from "../../models/IMovie";
 
-let mockData: IMovie[] = [
+export const mockData: IMovie[] = [
   {
     Title: "hej",
     imdbID: "0700818",
@@ -11,7 +11,7 @@ let mockData: IMovie[] = [
   },
 
   {
-    Title: "hej",
+    Title: "exempel",
     imdbID: "0700818",
     Type: "hej",
     Poster: "posterul",
@@ -19,16 +19,19 @@ let mockData: IMovie[] = [
   },
 
   {
-    Title: "hej",
+    Title: "wihoo",
     imdbID: "0700818",
     Type: "hej",
     Poster: "posterul",
     Year: "1996",
   },
 ];
-
 export const getData = async (searchText: string): Promise<IMovie[]> => {
-  return new Promise((resolve) => {
-    resolve(mockData);
+  return new Promise((resolve, reject) => {
+    if (searchText !== "") {
+      resolve(mockData);
+    } else {
+      reject();
+    }
   });
 };

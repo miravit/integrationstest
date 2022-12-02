@@ -1,59 +1,45 @@
 import { describe, test, expect, jest } from "@jest/globals";
+
 import { IMovie } from "../ts/models/IMovie";
 import { getData } from "../ts/services/movieservice";
+import { mockData } from "../ts/services/__mocks__/movieservice";
 
-let mockData: IMovie[] = [
-  {
-    Title: "hej",
-    imdbID: "0700818",
-    Type: "hej",
-    Poster: "posterul",
-    Year: "1998",
-  },
-
-  {
-    Title: "hej",
-    imdbID: "0700818",
-    Type: "hej",
-    Poster: "posterul",
-    Year: "1998",
-  },
-
-  {
-    Title: "hej",
-    imdbID: "0700818",
-    Type: "hej",
-    Poster: "posterul",
-    Year: "1996",
-  },
-];
-
+//anropa axios som fakear datan eftersom vi kör en jest.mock
 jest.mock("axios", () => ({
-  get: async () => {
-    return new Promise((resolve) => {
-      resolve({ data: { Search: mockData } });
+  get: async (textSearch: string) => {
+    return new Promise((resolve, reject) => {
+      if (textSearch.length > 3) {
+        resolve({ data: { Search: mockData } });
+      } else {
+        reject({ data: [] });
+      }
     });
   },
-}));
+})); //här ändar vi till reject och skickar in en tom lista, kolla på hans demo.
 
-describe("api", () => {
+describe("getData", () => {
   test("should get mockdata", async () => {
     //Arrange
     let textSearch: string = "söker film";
     //Act
     let movieInfo: IMovie[] = await getData(textSearch);
 
-    console.log(movieInfo);
-
     //Assert
     expect(movieInfo.length).toBe(3);
     expect(movieInfo[2].Year).toBe("1996");
   });
-  /*   test("should return []", async () => {
+
+  test("should return error", async () => {
     //Arrange
+
     let textSearch: string = "";
-    //Act
-    let movieInfo: IMovie[] = await getData(textSearch);
-    //Assert
-    expect().toBe([]); */
+    let movieInfo: IMovie[] = [];
+
+    try {
+      movieInfo = await getData(textSearch);
+    } catch (error: any) {
+      expect(error).toThrowError();
+      expect(error).toHaveReturnedWith([]);
+    }
+  });
 });

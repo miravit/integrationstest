@@ -24,12 +24,12 @@ export async function handleSubmit() {
     movies = await getData(searchText);
 
     if (movies.length > 0) {
-      exports.createHtml(movies, container); //.exports
+      exports.createHtml(movies, container);
     } else {
-      exports.displayNoResult(container); //.exports
+      exports.displayNoResult(container);
     }
   } catch {
-    exports.displayNoResult(container); //.exports
+    exports.displayNoResult(container);
   }
 }
 
