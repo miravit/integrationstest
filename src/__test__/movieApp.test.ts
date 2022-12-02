@@ -27,6 +27,7 @@ describe("init", () => {
 
 test("(displayNoResult)should create p-tag with a message", () => {
   //arrange
+
   document.body.innerHTML = `<div id="movie-container"></div>;`;
   const container: HTMLDivElement = document.getElementById(
     "movie-container"
@@ -39,37 +40,10 @@ test("(displayNoResult)should create p-tag with a message", () => {
   document.body.innerHTML = "";
 });
 
-/* describe("handleSubmit", () => {
-test("should call function", () => {
-  //arrange
-
-  let spy = jest.spyOn(functionsService, "getData").mockImplementation(
-    () =>
-      new Promise((resolve) => {
-        resolve(movies);
-      })
-  );
-
-  let searchText: string = "testInput";
-  let movies: IMovie[] = [];
-
-  document.body.innerHTML = `<div id="movie-container"></div>;`;
-  const container: HTMLDivElement = document.getElementById(
-    "movie-container"
-  ) as HTMLDivElement;
-
-  functionsService.getData(searchText);
-
-  //act
-  functionsMovieApp.handleSubmit();
-  //assert
-  expect(movies.length).toBeGreaterThan(0);
-});
- */
-
 jest.mock("./../ts/services/movieservice.ts");
 describe("createHTML", () => {
   test("should create html", async () => {
+    expect.assertions(3);
     //arrange
     let searchText: string = "hej hej";
     document.body.innerHTML = `<div id="movie-container"></div>;`;
@@ -97,17 +71,19 @@ describe("handle submit", () => {
   });
 
   jest.mock("axios", () => ({
-    get: async () => {
-      return new Promise((reject) => {
-        reject({
-          data: [],
-        });
+    get: async (textSearch: string) => {
+      return new Promise((resolve, reject) => {
+        if (textSearch.length > 3) {
+          resolve({ data: { Search: mockData } });
+        } else {
+          reject({ data: [] });
+        }
       });
     },
   }));
 
   test("should call createHtml", async () => {
-    //expect.assertions(1);
+    expect.assertions(1);
     document.body.innerHTML = `<form id="searchForm">
       <input type="text" id="searchText" value="star" placeholder="Skriv titel här" />
       <button type="submit" id="search">Sök</button>
@@ -120,4 +96,37 @@ describe("handle submit", () => {
     expect(spy).toHaveBeenCalled();
     document.body.innerHTML = "";
   });
+});
+test("should call displayNoResult", async () => {
+  //arrange
+  document.body.innerHTML = `<form id="searchForm">
+  <input type="text" id="searchText" value="star" placeholder="Skriv titel här" />
+  <button type="submit" id="search">Sök</button>
+</form>
+<div id="movie-container"></div>`;
+  let searchText: string = (
+    document.getElementById("searchText") as HTMLInputElement
+  ).value;
+  searchText = "";
+  let container: HTMLDivElement = document.getElementById(
+    "movie-container"
+  ) as HTMLDivElement;
+
+  let dataSpy = jest.spyOn(functionsService, "getData").mockImplementation(
+    () =>
+      new Promise((reject) => {
+        reject([]);
+      })
+  );
+
+  let spy = jest.spyOn(functionsMovieApp, "displayNoResult").mockReturnValue();
+
+  //act
+  try {
+    await functionsMovieApp.handleSubmit();
+  } catch {
+    expect(dataSpy).toHaveBeenCalled();
+    expect(spy).toBeCalledWith(container);
+    expect(functionsService.getData).toHaveBeenCalledTimes(1);
+  }
 });

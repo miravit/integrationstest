@@ -19,6 +19,7 @@ jest.mock("axios", () => ({
 
 describe("getData", () => {
   test("should get mockdata", async () => {
+    expect.assertions(2);
     //Arrange
     let textSearch: string = "söker film";
     //Act
