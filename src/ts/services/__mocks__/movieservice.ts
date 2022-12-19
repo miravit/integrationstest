@@ -2,6 +2,7 @@ import { IOmdbResponse } from "../../models/IOmdbResponse";
 import { IMovie } from "../../models/IMovie";
 
 export const mockData: IMovie[] = [
+  //min fakeade hårdkodade lista med filmer
   {
     Title: "hej",
     imdbID: "0700818",
@@ -27,11 +28,12 @@ export const mockData: IMovie[] = [
   },
 ];
 export const getData = async (searchText: string): Promise<IMovie[]> => {
+  //MITT FAKE AXIOSANROP
   return new Promise((resolve, reject) => {
     if (searchText !== "") {
       resolve(mockData);
     } else {
-      reject();
+      reject([]);
     }
   });
 };

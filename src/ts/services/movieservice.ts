@@ -3,6 +3,7 @@ import { IMovie } from "../models/IMovie";
 import axios from "axios";
 
 export const getData = async (searchText: string): Promise<IMovie[]> => {
+  //RIKTIGA AXIOSANROPET
   return axios
     .get<IOmdbResponse>("http://omdbapi.com/?apikey=416ed51a&s=" + searchText)
     .then((data) => {

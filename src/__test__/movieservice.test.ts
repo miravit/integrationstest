@@ -4,11 +4,10 @@ import { IMovie } from "../ts/models/IMovie";
 import { getData } from "../ts/services/movieservice";
 import { mockData } from "../ts/services/__mocks__/movieservice";
 
-//anropa axios som fakear datan eftersom vi kör en jest.mock
 jest.mock("axios", () => ({
   get: async (textSearch: string) => {
     return new Promise((resolve, reject) => {
-      if (textSearch.length > 3) {
+      if (textSearch.length > 0) {
         resolve({ data: { Search: mockData } });
       } else {
         reject({ data: [] });
